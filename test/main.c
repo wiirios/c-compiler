@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 		reader_file_t(BUFFER_, sizeof(BUFFER_), file, &block);	
 		scan_t(BUFFER_, &block);
 		
-		BUFFER_[0] = '\0';
+		memset(BUFFER_, 0, strlen(BUFFER_));
 	}
 	
 	printf("\nnumber os blocks: %d\n", block);
