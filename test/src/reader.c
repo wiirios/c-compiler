@@ -6,9 +6,9 @@ void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 	i = 0;
 	while ((peek = fgetc(file)) != EOF) {
 		
-		if (peek != ' ') BUFFER_[i] = peek;
+		if (peek != ' ' && (isalnum(peek) || isalpha(peek))) BUFFER_[i] = peek;
 		
-		if (IS_OPERATOR(peek)) {
+		if (IS_OPERATOR(peek) || IS_PUNCTUATORS(peek)) {
 			BUFFER_[0] = peek;
 			BUFFER_[1] = '\0';
 			break;	
