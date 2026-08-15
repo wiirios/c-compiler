@@ -5,21 +5,21 @@ void scan_t(char *phrase, int *block) {
 	token_t *token;
 		
 	if (IS_OPERATOR(*phrase)) goto is_operator;
-		
+	
 	while (isdigit(*phrase)) {
 		value = 10 * value + (*phrase - '0'); 
-	
+		
 		phrase++;
 	}
 	
-	token = init_token_t("INT", value, block);
+	token = init_token_t("INT", value, block, INTEGER_ENUM);
 	print_token_t(token);
 	free_token_t(token);
 	
 	return;
 	
-	is_operator:			
-		token = init_token_t("OPERATOR", (*phrase - '0'), NULL);
+	is_operator:
+		token = init_token_t("OPERATOR", *phrase, block, OPERATOR_ENUM);
 		print_token_t(token);
 		free_token_t(token);
 }

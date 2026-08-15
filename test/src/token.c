@@ -4,9 +4,10 @@ typedef struct token {
 	char *identifier;
 	int value;
 	int block;
+	enum TYPE type;
 } token_t;
 
-token_t *init_token_t(char *identifier, int value, int *block) {
+token_t *init_token_t(char *identifier, int value, int *block, enum TYPE type) {
 	if (!identifier) error_t("invalid token identifier");
 	
 	if (block < 0) error_t("a block cannot be negative");
@@ -27,14 +28,24 @@ token_t *init_token_t(char *identifier, int value, int *block) {
 	
 	token->value = value;
 	token->block = *block;
+	token->type = type;
 	
 	return token;
 }
 
-void print_token_t(token_t *token) {
-	printf("<%s, %d>", token->identifier, token->value);
-		
-	
+void print_token_t(token_t *token) {	
+	switch (token->type) {
+		// int
+        case 0:
+            printf("<%s, %d>", token->identifier, token->value);
+            break;
+        // operator
+        case 1:
+            printf("<%c>", token->value);
+            break;
+        default:
+			break;	
+	}
 }
 
 void free_token_t(token_t *token) {

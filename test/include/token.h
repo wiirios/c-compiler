@@ -3,9 +3,16 @@
 
 #include "utils.h"
 
+enum TYPE {
+	INTEGER_ENUM,
+	OPERATOR_ENUM,
+	PUNCTUATORS_ENUM,
+	ASSIGMENT_ENUM
+};
+
 typedef struct token token_t;
 
-token_t *init_token_t(char *identifier, int value, int *block);
+token_t *init_token_t(char *identifier, int value, int *block, enum TYPE type);
 
 void print_token_t(token_t *token);
 void free_token_t(token_t *token);
