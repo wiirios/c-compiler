@@ -1,15 +1,27 @@
 #include "../include/reader.h"
 
 void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
-	int peek, i;
+	int peek, lookahead, i;
 	extern int *ptr_phrase_type;
 
-	i = 0;
+	i = lookahead = 0;
 	while ((peek = fgetc(file)) != EOF) {
+		 
+		if (peek == '/') {
+			lookahead = fgetc(file);
+			
+			if (lookahead == '/') {
+				while ((peek = fgetc(file)) != EOF && peek != '\n');
+				
+				continue;
+			}
+			
+			ungetc(lookahead, file);
+		}
 		
 		if (peek != ' ' && (isdigit(peek) || isalpha(peek))) BUFFER_[i] = peek;
 		
-		if (IS_OPERATOR(peek) || IS_PUNCTUATORS(peek)) {
+		if ((IS_OPERATOR(peek) || IS_PUNCTUATORS(peek)) && (strlen(BUFFER_) == 0)) {
 			BUFFER_[0] = peek;
 			BUFFER_[1] = '\0';
 			
@@ -22,7 +34,7 @@ void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 		
 		if (peek == ' ' && strlen(BUFFER_) == 0) continue;
 		
-		if (peek == ' ') {	
+		if (peek == ' ' || peek == '\n') {	
 			BUFFER_[i] = '\0';
 			*ptr_phrase_type = get_phrase_type(BUFFER_);
 			
