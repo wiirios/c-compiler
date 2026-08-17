@@ -7,3 +7,6 @@ all:
 
 install: all
 	@echo "buid complete"
+
+clean:
+	rm cc
