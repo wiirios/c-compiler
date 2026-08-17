@@ -2,7 +2,8 @@
 
 void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 	int peek, i;
-	
+	extern int *ptr_phrase_type;
+
 	i = 0;
 	while ((peek = fgetc(file)) != EOF) {
 		
@@ -11,6 +12,7 @@ void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 		if (IS_OPERATOR(peek) || IS_PUNCTUATORS(peek)) {
 			BUFFER_[0] = peek;
 			BUFFER_[1] = '\0';
+			
 			break;	
 		}
 		
@@ -20,8 +22,10 @@ void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 		
 		if (peek == ' ' && strlen(BUFFER_) == 0) continue;
 		
-		if (peek == ' ') {
+		if (peek == ' ') {	
 			BUFFER_[i] = '\0';
+			*ptr_phrase_type = get_phrase_type(BUFFER_);
+			
 			break;
 		}
 		

@@ -5,6 +5,9 @@
  *
  *
 */
+static int block = 0;
+static int phrase_type = -1;
+int *ptr_phrase_type = &phrase_type;	
 
 int main(int argc, char *argv[]) {
 	if (argc < 2) error_t("argv < 2");
@@ -12,7 +15,6 @@ int main(int argc, char *argv[]) {
 	FILE *file = get_file_t(argv[1]);
 	
 	char BUFFER_[BUFFER_SIZE_T];
-	static int block = 0;
 	
 	while (feof(file) == 0) {	
 		reader_file_t(BUFFER_, sizeof(BUFFER_), file, &block);	
