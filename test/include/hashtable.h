@@ -11,6 +11,7 @@ typedef struct ht ht_t;
 typedef struct hte hte_t;
 
 ht_t *ht_create(void);
+ht_t *ht_init(void);
 
 hte_t *hte_create_entry(const char *key, int value);
 

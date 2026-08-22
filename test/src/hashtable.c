@@ -46,6 +46,9 @@ void ht_insert(ht_t *ht, hte_t *hte) {
 	
 	int hash = hash_key(hte->key) % MAX_CAPACITY;
 	
+	printf("hte->key: %s\n", hte->key);
+	printf("hash: %d\n", hash);
+	
 	if (ht->entries[hash] != NULL) {
 		for (; hash < ht->capacity; hash++) if (ht->entries[hash] == NULL) {
 				ht->entries[hash] = hte;
@@ -108,6 +111,41 @@ void hte_destroy(ht_t *ht) {
 
 void get(ht_t *ht, const char *key) {
 	int hash = hash_key(key) % MAX_CAPACITY;
+	
+	if (strcmp(key, ht->entries[hash]->key) == 0) printf("%d\n", ht->entries[hash]->value);
+	else {
+		for (; hash < ht->capacity; hash++) {
+			if (strcmp(key, ht->entries[hash]->key) == 0) {
+				printf("%d\n", ht->entries[hash]->value);
+				return;
+			}
+		}
+		
+		hash = hash_key(key) % MAX_CAPACITY;
+		
+		if (hash == 0) error_t("the key not exist");
+		else {
+			int i = 0;
+			
+			for (; i < hash; i++) {
+				if (strcmp(key, ht->entries[hash]->key) == 0) {
+					printf("%d\n", ht->entries[hash]->value);
+					return;
+				}
+			}
+			
+			error_t("the key not exist");
+		}
+	}
+}
 
-	printf("%d\n", ht->entries[hash]->value);
+ht_t *ht_init(void) {
+	ht_t *ht = ht_create();
+	
+	ht_insert(ht, hte_create_entry("int", INTEGER_PRIMITIVE_DATA_TYPE));
+	ht_insert(ht, hte_create_entry("char", CHAR_PRIMITIVE_DATA_TYPE));
+	ht_insert(ht, hte_create_entry("float", FLOAT_PRIMITIVE_DATA_TYPE));
+	ht_insert(ht, hte_create_entry("long", LONG_PRIMITIVE_DATA_TYPE));
+	
+	return ht;
 }

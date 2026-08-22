@@ -1,15 +1,35 @@
 #include <stdio.h>
 
 #include "include/utils.h"
+
+#define TEST 1
+
 /*
  *
  *
 */
 static int block = 0;
 static int phrase_type = -1;
-int *ptr_phrase_type = &phrase_type;	
+int *ptr_phrase_type = &phrase_type;
 
 int main(int argc, char *argv[]) {
+	#if TEST
+	
+	ht_t *ht = ht_init();
+	
+	ht_printall(ht);
+	
+	get(ht, "float");
+	get(ht, "char");
+	
+	hte_destroy(ht);
+	ht_destroy(ht);
+	
+	printf("exiting...\n");	
+	exit(EXIT_SUCCESS);
+	#endif
+	
+	
 	if (argc < 2) error_t("argv < 2");
 	
 	FILE *file = get_file_t(argv[1]);
