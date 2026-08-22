@@ -9,6 +9,7 @@
 #define IS_PUNCTUATORS(c) (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}')
 #define IS_ASSIGNMENT(c) (c == '=')
 #define IS_LOGICAL(c) (c == '&' || c == '|')
+#define IS_RESERVED_WORD(c) (strcmp((c), "int") == 0 || strcmp((c), "char") == 0 || strcmp((c), "float") == 0 || strcmp((c), "long") == 0)
 
 /*
  * 
