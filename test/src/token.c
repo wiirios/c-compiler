@@ -1,11 +1,10 @@
-#include "../include/token.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
-typedef struct token {
-	char *identifier;
-	void *value;
-	int block;
-	enum TYPE type;
-} token_t;
+#include "../include/token.h"
+#include "../include/utils.h"
 
 token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type) {
 	if (!identifier) error_t("invalid token identifier");
@@ -26,29 +25,24 @@ token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type)
 	
 	memcpy(token->identifier, identifier, strlen(identifier) + 1);
 	
-	
 	switch (type) {
 		case 0:
+		case 4:
+		case 5:
+		case 6:
+		case 9:
 			token->value = malloc(sizeof(int));
 			
 			if (!token->value) error_t("error while allocating for token (int)");
-			
 			*(int*)token->value = *(int*)value;
 			break;
 		case 1:
+		case 8:
 			token->value = (char*) malloc(strlen(value) + 1);
 			
 			if (!token->value) error_t("error while allocating for token (char)");
 			
-			memcpy(token->value, value, strlen(value) + 1);
-			
-			break;
-		case 4:
-			token->value = malloc(sizeof(int));
-			if (!token->value) error_t("error while allocating for token (int)");
-			
-			*(int*)token->value = *(int*)value;
-			
+			memcpy(token->value, value, strlen(value) + 1);			
 			break;
 		default:
 			break;
@@ -60,7 +54,18 @@ token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type)
 	return token;
 }
 
-void print_token_t(token_t *token) {
+tokens_t *init_tokens_t() {
+	tokens_t *tokens;
+	tokens = (tokens_t*) malloc(sizeof(tokens_t));
+	
+	if (!tokens) error_t("error while allocated token");
+	
+	tokens->length = 0;
+	
+	return tokens;
+}
+
+void print_token_t(token_t *token) {	
 	switch (token->type) {
 		// int
         case 0:
@@ -76,9 +81,15 @@ void print_token_t(token_t *token) {
         case 4:
         case 5:
         case 6:
-			printf("<%c>", *(char*)token->value);
+        case 7:
+        case 9:
+			printf("<%c>", *(int*)token->value);
             break;
+        case 8:
+			printf("<%s>", (char*)token->identifier);
+			break;
         default:
+			error_t("type not found");
 			break;
 	}
 	
@@ -90,5 +101,9 @@ void print_token_t(token_t *token) {
 void free_token_t(token_t *token) {
 	if (!token) error_t("alloc a token first");
 	
-	free(token);	
+	free(token);
+}
+
+void free_tokens_t(tokens_t *tokens) {
+	for (int i = 0; i < tokens->length; i++) if (tokens->array_tokens[i] != NULL) free_token_t(tokens->array_tokens[i]);	
 }
