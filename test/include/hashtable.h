@@ -1,8 +1,6 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H	
 
-#include "utils.h"
-
 #define MAX_CAPACITY 8
 #define FNV_OFFSET 14695981039346656037UL
 #define FNV_PRIME 1099511628211UL

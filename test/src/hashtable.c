@@ -1,4 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdint.h>
+
 #include "../include/hashtable.h"
+#include "../include/utils.h"
+#include "../include/lexer.h"
 
 typedef struct ht {
 	size_t capacity;
@@ -45,9 +53,6 @@ void ht_insert(ht_t *ht, hte_t *hte) {
 	if (ht->length == ht->capacity) error_t("ht is full");
 	
 	int hash = hash_key(hte->key) % MAX_CAPACITY;
-	
-	printf("hte->key: %s\n", hte->key);
-	printf("hash: %d\n", hash);
 	
 	if (ht->entries[hash] != NULL) {
 		for (; hash < ht->capacity; hash++) if (ht->entries[hash] == NULL) {

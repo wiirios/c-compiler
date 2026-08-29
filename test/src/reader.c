@@ -1,4 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <sys/stat.h>
+
 #include "../include/reader.h"
+#include "../include/utils.h"
+#include "../include/lexer.h"
 
 void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 	int peek, lookahead, i;
@@ -21,7 +29,7 @@ void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 		
 		if (peek != ' ' && (isdigit(peek) || isalpha(peek))) BUFFER_[i] = peek;
 		
-		if ((IS_OPERATOR(peek) || IS_PUNCTUATORS(peek)) && (strlen(BUFFER_) == 0)) {
+		if ((IS_OPERATOR(peek) || IS_PUNCTUATORS(peek) || IS_ASSIGNMENT(peek) || IS_SEMICOLON(peek)) && (strlen(BUFFER_) == 0)) {
 			BUFFER_[0] = peek;
 			BUFFER_[1] = '\0';
 			
