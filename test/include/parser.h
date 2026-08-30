@@ -14,6 +14,9 @@ int type(token_t *token);
 int id(token_t *token);
 int assigment(token_t *token);
 int expression(token_t *token);
+
+int factor(token_t *token);
+int number(token_t *token);
 int semicolon(token_t *token);
 
 typedef struct node node_t;
@@ -38,22 +41,3 @@ void free_ll(ll_t *ll);
 void print_ll(ll_t *ll);
 
 #endif
-
-/*
- * declaration -> type id = expression ;
- * type -> int | char | float | long
- * id -> [Aa-Zz]+
-*/
-
-/*
- * expression -> factor
- * expression -> factor + factor
- * 				| factor - factor
- * 				| factor / factor
- * 				| factor * factor
- * 				| (expression)
- * 				| expression 
- * factor -> number+
- * number -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
- */
-

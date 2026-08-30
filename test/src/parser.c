@@ -6,6 +6,8 @@
 #include "../include/parser.h"
 #include "../include/utils.h"
 
+// todo: implement operator precedence (and apply this to the linked list responsible for assembling the sequence of tokens)
+
 int parser(tokens_t *tokens) {
 	if (tokens->length < 5) return 0;
 	
@@ -16,7 +18,7 @@ int parser(tokens_t *tokens) {
 		free_tokens_t(tokens);
 		error_t("invalid declaration");	
 	}
-	
+	print_ll(ll);
 	free_ll(ll);
 	return 1;
 } 
@@ -33,13 +35,36 @@ int declaration(ll_t *ll, tokens_t *tokens) {
 		expression, 
 		semicolon
 	};
-	int i = 0;
+	int i, j, i_c;
+	i = j = i_c = 0;
 	
-	while (tokens->array_tokens[i] != NULL) {
-		if (!alldecl[i](tokens->array_tokens[i])) return 0;
+	while (tokens->array_tokens[j] != NULL) {
+		if (i_c >= 1) {
+			while (1) {
+				if (tokens->array_tokens[j]->type == OPERATOR_ENUM && tokens->array_tokens[j + 1]->type == INTEGER_ENUM) goto binary;
+				
+				if (tokens->array_tokens[j]->type == INTEGER_ENUM && tokens->array_tokens[j - 1]->type == INTEGER_ENUM) return 0;
+				
+				if (tokens->array_tokens[j]->type == SEMICOLON_ENUM) break;
+				
+				if(!alldecl[i - 1](tokens->array_tokens[j])) return 0;
+				
+				binary:
+				insert_node(ll, tokens->array_tokens[j]);
+				j++;
+			}
+
+			i_c = 0;
+		}
 		
-		insert_node(ll, tokens->array_tokens[i]);
+		if (!alldecl[i](tokens->array_tokens[j])) return 0;
+		
+		insert_node(ll, tokens->array_tokens[j]);
+		
+		if (tokens->array_tokens[j]->type == INTEGER_ENUM) i_c++;
+				
 		i++;
+		j++;
 	}
 	
 	return 1;
@@ -64,6 +89,18 @@ int assigment(token_t *token) {
 }
 
 int expression(token_t *token) {
+	if (!factor(token)) return 0;
+	
+	return 1;
+}
+
+int factor(token_t *token) {
+	if (!number(token)) return 0;
+	
+	return 1;
+}
+
+int number(token_t *token) {
 	if (token->type != INTEGER_ENUM) return 0;
 	
 	return 1;
