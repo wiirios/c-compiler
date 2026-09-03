@@ -6,6 +6,8 @@
 #include "../include/parser.h"
 #include "../include/utils.h"
 
+extern int line;
+
 // todo: implement operator precedence (and apply this to the linked list responsible for assembling the sequence of tokens)
 
 int parser(tokens_t *tokens) {
@@ -14,6 +16,7 @@ int parser(tokens_t *tokens) {
 	ll_t *ll = init_ll();
 	
 	if (!declaration(ll, tokens)) {
+		panic(tokens);
 		free_ll(ll);
 		free_tokens_t(tokens);
 		error_t("invalid declaration");	
@@ -43,21 +46,30 @@ int declaration(ll_t *ll, tokens_t *tokens) {
 			while (1) {
 				if (tokens->array_tokens[j]->type == OPERATOR_ENUM && tokens->array_tokens[j + 1]->type == INTEGER_ENUM) goto binary;
 				
-				if (tokens->array_tokens[j]->type == INTEGER_ENUM && tokens->array_tokens[j - 1]->type == INTEGER_ENUM) return 0;
+				if (tokens->array_tokens[j]->type == INTEGER_ENUM && tokens->array_tokens[j - 1]->type == INTEGER_ENUM) {
+					
+					return 0;
+				}
 				
 				if (tokens->array_tokens[j]->type == SEMICOLON_ENUM) break;
 				
-				if(!alldecl[i - 1](tokens->array_tokens[j])) return 0;
+				if(!alldecl[i - 1](tokens->array_tokens[j])) {
+					
+					return 0;
+				}
 				
 				binary:
-				insert_node(ll, tokens->array_tokens[j]);
-				j++;
+					insert_node(ll, tokens->array_tokens[j]);
+					j++;
 			}
 
 			i_c = 0;
 		}
 		
-		if (!alldecl[i](tokens->array_tokens[j])) return 0;
+		if (!alldecl[i](tokens->array_tokens[j])) {
+			
+			return 0;	
+		}
 		
 		insert_node(ll, tokens->array_tokens[j]);
 		
@@ -71,43 +83,78 @@ int declaration(ll_t *ll, tokens_t *tokens) {
 }
 
 int type(token_t *token) {
-	if (token->type != RESERVED_ENUM) return 0;
+	if (token->type != RESERVED_ENUM) {
+		token->panic_s.error = 1;
+		memcpy(token->panic_s.msg, "type error", 11);
+		
+		return 0;	
+	}
 	
 	return 1;
 }
 
 int id(token_t *token) {
-	if (token->identifier == NULL || *token->identifier == '\0') return 0;
+	if (token->identifier == NULL || *token->identifier == '\0') {
+		token->panic_s.error = 1;
+		memcpy(token->panic_s.msg, "id error", 9);
+		
+		return 0;
+	}
 	
 	return 1;
 }
 
 int assigment(token_t *token) {
-	if (token->type != ASSIGMENT_ENUM && !IS_ASSIGNMENT(*token->identifier) && strlen(token->identifier) != 1) return 0;
+	if (token->type != ASSIGMENT_ENUM && !IS_ASSIGNMENT(*token->identifier) && strlen(token->identifier) != 1) {
+		token->panic_s.error = 1;
+		memcpy(token->panic_s.msg, "assigment error", 16);
+		
+		return 0;
+	}
 	
 	return 1;
 }
 
 int expression(token_t *token) {
-	if (!factor(token)) return 0;
+	if (!factor(token)) {
+		token->panic_s.error = 1;
+		memcpy(token->panic_s.msg, "expression error", 17);
+		
+		return 0;
+	}
 	
 	return 1;
 }
 
 int factor(token_t *token) {
-	if (!number(token)) return 0;
+	if (!number(token)) {
+		token->panic_s.error = 1;
+		memcpy(token->panic_s.msg, "factor error", 13);
+		
+		return 0;
+	}
 	
 	return 1;
 }
 
 int number(token_t *token) {
-	if (token->type != INTEGER_ENUM) return 0;
+	if (token->type != INTEGER_ENUM) {
+		token->panic_s.error = 1;
+		memcpy(token->panic_s.msg, "number error", 13);
+		
+		return 0;
+	}
 	
 	return 1;
 }
 
 int semicolon(token_t *token) {
-	if (token->type != SEMICOLON_ENUM && !IS_SEMICOLON(*token->identifier) && strlen(token->identifier) != 1) return 0;
+	if (token->type != SEMICOLON_ENUM && !IS_SEMICOLON(*token->identifier) && strlen(token->identifier) != 1) {
+		token->panic_s.error = 1;
+		memcpy(token->panic_s.msg, "semicolon error", 16);
+		
+		return 0;
+	}
 	
 	return 1;
 }
@@ -171,4 +218,26 @@ void print_ll(ll_t *ll) {
 		printf("ll token->identifier: %s\n", current->token->identifier);	
 		ll->head = ll->head->next;
 	}
+}
+
+void panic(tokens_t *tokens) {
+	int i, j, k, l;
+	i = j = k = l = 0;
+	
+	for (; i < tokens->length; i++) {
+		if (tokens->array_tokens[i]->panic_s.error == 1) { 
+			j = i - 1;
+			
+			printf("\nerror: line=%d", get_file_line());
+			printf("\nexpected: [%s] at:\n", tokens->array_tokens[i]->panic_s.msg);
+			
+			l += print_token_t(tokens->array_tokens[j]);
+			l += print_token_t(tokens->array_tokens[i]);
+			
+			printf("\n");
+			for (; k < l; k++) putchar('~');
+		}
+	}
+	
+	printf("\n");
 }

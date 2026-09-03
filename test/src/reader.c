@@ -3,10 +3,14 @@
 #include <string.h>
 #include <ctype.h>
 #include <sys/stat.h>
+#include <limits.h>
 
 #include "../include/reader.h"
 #include "../include/utils.h"
 #include "../include/lexer.h"
+
+static unsigned int line = 1;
+char FILE_NAME[PATH_MAX];
 
 void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 	int peek, lookahead, i;
@@ -40,9 +44,11 @@ void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 		
 		if (IS_PUNCTUATORS(peek) && peek == '}') *block-=1;
 		
+		if (peek == '\n') line++;
+		
 		if (peek == ' ' && strlen(BUFFER_) == 0) continue;
 		
-		if (peek == ' ' || peek == '\n') {	
+		if (peek == ' ' || peek == '\n') {
 			BUFFER_[i] = '\0';
 			*ptr_phrase_type = get_phrase_type(BUFFER_);
 			
@@ -65,6 +71,8 @@ FILE *get_file_t(const char *file_name) {
 		
 		if (!file) error_t("error while open argc 1");
 		
+		memcpy(FILE_NAME, file_name, strlen(file_name) + 1);
+		
 		return file;
 }
 
@@ -78,4 +86,8 @@ int get_file_size_t(const char *file_name, size_t *out_size) {
     *out_size = (size_t) st.st_size;
 
     return 0;
+}
+
+unsigned int get_file_line() {
+	return line;
 }

@@ -6,6 +6,10 @@
 
 #define DECLARATION_SIZE 5
 
+enum PANIC_CODES {
+	EXPRESSION_INVALID,
+};
+
 void print_token_t_parser(tokens_t *tokens);
 
 int parser(tokens_t *tokens);
@@ -39,5 +43,6 @@ int declaration(ll_t *ll, tokens_t *tokens);
 void insert_node(ll_t *ll, token_t *token);
 void free_ll(ll_t *ll);
 void print_ll(ll_t *ll);
+void panic(tokens_t *tokens);
 
 #endif
