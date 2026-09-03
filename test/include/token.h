@@ -4,6 +4,7 @@
 #define SHOW_TYPE_TOKEN 0
 #define TYPES_LENGTH 8
 #define MAX_TOKENS 32
+#define MAX_PANIC_TOKEN_MSG_LENGTH 1024
 
 enum TYPE {
 	INTEGER_ENUM,			// 0
@@ -28,11 +29,17 @@ enum TOKEN_RESERVED_KEYWORD {
 typedef struct token token_t;
 typedef struct tokens tokens_t;
 
+struct panic {
+	char msg[MAX_PANIC_TOKEN_MSG_LENGTH];
+	int error;
+};
+
 struct token {
 	char *identifier;
 	void *value;
 	int block;
 	enum TYPE type;
+	struct panic panic_s;
 };
 
 struct tokens {
@@ -44,7 +51,8 @@ token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type)
 
 tokens_t *init_tokens_t();
 
-void print_token_t(token_t *token);
+int print_token_t(token_t *token);
+
 void free_token_t(token_t *token);
 void free_tokens_t(tokens_t *tokens);
 
