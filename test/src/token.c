@@ -50,6 +50,8 @@ token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type)
 	
 	token->block = *block;
 	token->type = type;
+	token->panic_s.error = '\0';
+	token->panic_s.error = -1;
 	
 	return token;
 }
@@ -65,28 +67,33 @@ tokens_t *init_tokens_t() {
 	return tokens;
 }
 
-void print_token_t(token_t *token) {	
+int print_token_t(token_t *token) {	
+	int length = 0;
+	
 	switch (token->type) {
 		// int
         case 0:
-            printf("<%s, %d>", token->identifier, *(int*)token->value);
+            length = printf("<%s, %d>", token->identifier, *(int*)token->value);
             break;
         // char
         case 1:
-			printf("<%s, %s>", token->identifier, (char*)token->value);
+			length = printf("<%s, %s>", token->identifier, (char*)token->value);
             break;
         // operator
         // punctuators
         // assigment
+        // logical
+        // semicolon
         case 4:
         case 5:
         case 6:
         case 7:
         case 9:
-			printf("<%c>", *(int*)token->value);
+			length = printf("<%c>", *(int*)token->value);
             break;
+        // reserved
         case 8:
-			printf("<%s>", (char*)token->identifier);
+			length = printf("<%s>", (char*)token->identifier);
 			break;
         default:
 			error_t("type not found");
@@ -96,6 +103,8 @@ void print_token_t(token_t *token) {
 	#if SHOW_TYPE_TOKEN
 		printf("%d", token->type);
 	#endif
+	
+	return length;
 }
 
 void free_token_t(token_t *token) {
