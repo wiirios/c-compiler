@@ -9,6 +9,8 @@
 #define IS_LOGICAL(c) (c == '&' || c == '|')
 #define IS_RESERVED_WORD(c) (strcmp((c), "int") == 0 || strcmp((c), "char") == 0 || strcmp((c), "float") == 0 || strcmp((c), "long") == 0)
 #define IS_SEMICOLON(c) (c == ';')
+#define IS_LETTER(c) (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z')
+#define IS_NUMBER(c) (c >= '0' && c <= '9')
 
 void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block); 
 
