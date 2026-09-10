@@ -52,6 +52,8 @@ token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type)
 tokens_t *init_tokens_t();
 
 int print_token_t(token_t *token);
+int get_token_block(token_t *token);
+int get_tokens_length(tokens_t *tokens);
 
 void free_token_t(token_t *token);
 void free_tokens_t(tokens_t *tokens);

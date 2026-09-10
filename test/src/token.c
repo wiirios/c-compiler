@@ -5,6 +5,7 @@
 
 #include "../include/token.h"
 #include "../include/utils.h"
+#include "../include/dock.h"
 
 token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type) {
 	if (!identifier) error_t("invalid token identifier");
@@ -96,7 +97,7 @@ int print_token_t(token_t *token) {
 			length = printf("<%s>", (char*)token->identifier);
 			break;
         default:
-			error_t("type not found");
+			token->value = NULL;
 			break;
 	}
 	
@@ -110,9 +111,25 @@ int print_token_t(token_t *token) {
 void free_token_t(token_t *token) {
 	if (!token) error_t("alloc a token first");
 	
+	if (token->type == 8 || token->type == 1) {
+		memset(token->value, 0, strlen(token->value));	
+	}
+	
+	free(token->value);
+	memset(token->identifier, 0, strlen(token->identifier));	
+	free(token->identifier);
 	free(token);
+	token = NULL;
 }
 
 void free_tokens_t(tokens_t *tokens) {
 	for (int i = 0; i < tokens->length; i++) if (tokens->array_tokens[i] != NULL) free_token_t(tokens->array_tokens[i]);	
+}
+
+int get_token_block(token_t *token) {
+	return token->block;
+}
+
+int get_tokens_length(tokens_t *tokens) {
+	return tokens->length;
 }
