@@ -33,10 +33,13 @@ int insert_ship_t(dock_t *dock, void *item, enum TYPE_ITEM type) {
 }
 
 void destroy_dock(dock_t *dock) {
-	if (dock->length == 0) {
-		free(dock);
-		return;	
+	if (dock) {
+		if (dock->length == 0) {
+			free(dock);
+			return;	
+		}
 	}
+	else return;
 	
 	int tokens_i = 0;
 	
