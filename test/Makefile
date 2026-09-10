@@ -1,8 +1,8 @@
 C = clang
 NAME = cc
-SRC = main.c src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c
-SRC_GDB = main.c -g src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c
-SRC_WARNINGS = main.c -Wall -Wextra src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c
+SRC = main.c src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c src/dock.c
+SRC_GDB = main.c -g src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c src/dock.c
+SRC_WARNINGS = main.c -Wall -Wextra src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c src/dock.c
 
 all:
 	$(C) $(SRC) -o $(NAME)
@@ -17,10 +17,10 @@ install: all
 	@echo "buid complete"
 
 debug: alld
-	@echo "buid complete"
+	@echo "buid [debug] complete"
 
 war: allw
-	@echo "buid complete"
+	@echo "buid [warnings] complete"
 
 clean:
 	rm cc
