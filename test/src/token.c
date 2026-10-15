@@ -10,7 +10,7 @@
 token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type) {
 	if (!identifier) error_t("invalid token identifier");
 	
-	if (block < 0) error_t("a block cannot be negative");
+	if (*block < 0) error_t("a block cannot be negative");
 	
 	token_t *token;
 	token = (token_t*) malloc(sizeof(token_t));
@@ -68,8 +68,13 @@ tokens_t *init_tokens_t() {
 	return tokens;
 }
 
-int print_token_t(token_t *token) {	
+int print_token_t(token_t *token, uint8_t flag) {	
 	int length = 0;
+	
+	if (flag) {
+		printf("[%d] %s", token->type, token->identifier);
+		goto end;
+	}
 	
 	switch (token->type) {
 		// int
@@ -100,7 +105,7 @@ int print_token_t(token_t *token) {
 			token->value = NULL;
 			break;
 	}
-	
+	end:
 	#if SHOW_TYPE_TOKEN
 		printf("%d", token->type);
 	#endif

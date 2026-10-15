@@ -1,6 +1,8 @@
 #ifndef TOKEN_HEADER
 #define TOKEN_HEADER
 
+#include <stdint.h>
+
 #define SHOW_TYPE_TOKEN 0
 #define TYPES_LENGTH 8
 #define MAX_TOKENS 32
@@ -51,7 +53,7 @@ token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type)
 
 tokens_t *init_tokens_t();
 
-int print_token_t(token_t *token);
+int print_token_t(token_t *token, uint8_t flag);
 int get_token_block(token_t *token);
 int get_tokens_length(tokens_t *tokens);
 
