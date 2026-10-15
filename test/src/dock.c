@@ -70,3 +70,7 @@ static void free_dock(dock_t *dock) {
 	free(dock->ships);
 	free(dock);
 }
+
+size_t dock_length_t(dock_t *dock) {
+	return dock->length;
+}

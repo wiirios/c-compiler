@@ -34,4 +34,6 @@ int insert_ship_t(dock_t *dock, void *item, enum TYPE_ITEM type);
 void destroy_dock(dock_t *dock);
 static void free_dock(dock_t *dock);
 
+size_t dock_length_t(dock_t *dock);
+
 #endif
