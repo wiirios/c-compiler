@@ -7,6 +7,7 @@
 #include "../include/parser.h"
 #include "../include/reader.h"
 #include "../include/utils.h"
+#include "../include/hashtable.h"
 
 char *PRIMITIVE_DATA_TYPES_C[] = {
 	"int",
@@ -26,6 +27,7 @@ void scan_t(char *phrase, int *block, tokens_t *tokens) {
 	token_t *token;
 	int value, i;	
 	extern int *ptr_phrase_type;
+	extern ht_t *ht;
 	char BUFFER[strlen(phrase) + 1];
 	
 	//if (!tokens) tokens = init_tokens_t();
@@ -46,8 +48,6 @@ void scan_t(char *phrase, int *block, tokens_t *tokens) {
 		token = init_token_t("ASSIGNMENT", &BUFFER, block, ASSIGMENT_ENUM);
 		
 		memset(BUFFER, 0, strlen(BUFFER));
-		print_token_t(token);
-		free_token_t(token);
 		tokens->length+=1;
 		
 		return;
@@ -65,9 +65,9 @@ void scan_t(char *phrase, int *block, tokens_t *tokens) {
 		
 		token = init_token_t("INT", &value, block, INTEGER_ENUM);
 		
-		print_token_t(token);
 		tokens->array_tokens[tokens->length] = token;
-		tokens->length+=1;		
+		tokens->length+=1;
+		ht_insert(ht, hte_create_entry(token->identifier, INTEGER_PRIMITIVE_DATA_TYPE, *block));
 		
 		return;
 		
@@ -89,19 +89,17 @@ void scan_t(char *phrase, int *block, tokens_t *tokens) {
 			memset(BUFFER, 0, strlen(BUFFER));
 			
 			tokens->array_tokens[tokens->length] = token;		
-			print_token_t(token);
-			
 			tokens->length+=1;
+			
 			return;
 		}
 			
 		token = init_token_t("CHAR", &BUFFER, block, CHAR_ENUM);
 		memset(BUFFER, 0, strlen(BUFFER));
 		
-		print_token_t(token);
 		tokens->array_tokens[tokens->length] = token;
-		
 		tokens->length+=1;
+		
 		return;
 		
 	is_signal:
@@ -115,10 +113,9 @@ void scan_t(char *phrase, int *block, tokens_t *tokens) {
 		else if (IS_ASSIGNMENT(*phrase)) token = init_token_t("ASSIGNMENT", &BUFFER, block, ASSIGMENT_ENUM);
 		
 		memset(BUFFER, 0, strlen(BUFFER));
-		print_token_t(token);
 		tokens->array_tokens[tokens->length] = token;
-		
 		tokens->length+=1;
+		
 		return;
 }
 
