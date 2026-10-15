@@ -4,13 +4,11 @@
 #include "token.h"
 #include "reader.h"
 
-#define DECLARATION_SIZE 5
+#define DECLARATION_SIZE 6
 
 enum PANIC_CODES {
 	EXPRESSION_INVALID,
 };
-
-void print_token_t_parser(tokens_t *tokens);
 
 int parser(tokens_t *tokens);
 

@@ -5,8 +5,10 @@
 
 #include "../include/parser.h"
 #include "../include/utils.h"
+#include "../include/dock.h"
 
 extern int line;
+extern dock_t *dock;
 
 // todo: implement operator precedence (and apply this to the linked list responsible for assembling the sequence of tokens)
 
@@ -14,21 +16,16 @@ int parser(tokens_t *tokens) {
 	if (tokens->length < 5) return 0;
 	
 	ll_t *ll = init_ll();
+	insert_ship_t(dock, ll, TYPEITEM_LL);
 	
 	if (!declaration(ll, tokens)) {
 		panic(tokens);
-		free_ll(ll);
-		free_tokens_t(tokens);
-		error_t("invalid declaration");	
+		error_t("invalid declaration");
 	}
-	print_ll(ll);
+	
 	free_ll(ll);
 	return 1;
 } 
-
-void print_token_t_parser(tokens_t *tokens) {
-	for (int i = 0; i < tokens->length; i++) if (tokens->array_tokens[i] != NULL) printf("token->identifier: %s at :[%d]\n", tokens->array_tokens[i]->identifier, i);
-}
 
 int declaration(ll_t *ll, tokens_t *tokens) {
 	int (*alldecl[DECLARATION_SIZE])(token_t *token) = 
@@ -53,7 +50,7 @@ int declaration(ll_t *ll, tokens_t *tokens) {
 				
 				if (tokens->array_tokens[j]->type == SEMICOLON_ENUM) break;
 				
-				if(!alldecl[i - 1](tokens->array_tokens[j])) {
+				if (!alldecl[i - 1](tokens->array_tokens[j])) {
 					
 					return 0;
 				}
@@ -162,11 +159,8 @@ int semicolon(token_t *token) {
 ll_t *init_ll(void) {
 	ll_t *ll = (ll_t*) malloc(sizeof(ll_t));
 
-	if (!ll) {
-		//
-		error_t("Error while creating linked list\n");
-	}
-	
+	if (!ll) error_t("Error while creating linked list\n");
+		
 	ll->head = NULL;
 	
 	return ll;
@@ -175,9 +169,7 @@ ll_t *init_ll(void) {
 node_t *init_node(token_t *token) {
 	node_t *node = (node_t*) malloc(sizeof(node_t));
 	
-	if (!node) {
-		error_t("\n");	
-	}
+	if (!node) error_t("\n");
 	
 	node->next = NULL;
 	node->token = token;
@@ -213,7 +205,7 @@ void free_ll(ll_t *ll) {
 
 void print_ll(ll_t *ll) {
 	node_t *current;
-	
+	printf("\n");
 	while ((current = ll->head) != NULL) {
 		printf("ll token->identifier: %s\n", current->token->identifier);	
 		ll->head = ll->head->next;
@@ -231,8 +223,8 @@ void panic(tokens_t *tokens) {
 			printf("\nerror: line=%d", get_file_line());
 			printf("\nexpected: [%s] at:\n", tokens->array_tokens[i]->panic_s.msg);
 			
-			l += print_token_t(tokens->array_tokens[j]);
-			l += print_token_t(tokens->array_tokens[i]);
+			l += print_token_t(tokens->array_tokens[j], 0);
+			l += print_token_t(tokens->array_tokens[i], 0);
 			
 			printf("\n");
 			for (; k < l; k++) putchar('~');
