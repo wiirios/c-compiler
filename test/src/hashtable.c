@@ -31,7 +31,7 @@ ht_t *ht_create(void) {
 	return ht;
 }
 
-hte_t *hte_create_entry(const char *key, int value) {
+hte_t *hte_create_entry(const char *key, int value, int block) {
 	hte_t *hte;
 	hte = (hte_t*) malloc(sizeof(hte_t));
 	
@@ -147,10 +147,10 @@ void get(ht_t *ht, const char *key) {
 ht_t *ht_init(void) {
 	ht_t *ht = ht_create();
 	
-	ht_insert(ht, hte_create_entry("int", INTEGER_PRIMITIVE_DATA_TYPE));
-	ht_insert(ht, hte_create_entry("char", CHAR_PRIMITIVE_DATA_TYPE));
-	ht_insert(ht, hte_create_entry("float", FLOAT_PRIMITIVE_DATA_TYPE));
-	ht_insert(ht, hte_create_entry("long", LONG_PRIMITIVE_DATA_TYPE));
+	ht_insert(ht, hte_create_entry("int", INTEGER_PRIMITIVE_DATA_TYPE, -1));
+	ht_insert(ht, hte_create_entry("char", CHAR_PRIMITIVE_DATA_TYPE, -1));
+	ht_insert(ht, hte_create_entry("float", FLOAT_PRIMITIVE_DATA_TYPE, -1));
+	ht_insert(ht, hte_create_entry("long", LONG_PRIMITIVE_DATA_TYPE, -1));
 	
 	return ht;
 }
