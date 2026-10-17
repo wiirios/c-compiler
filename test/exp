@@ -1,0 +1,5 @@
+# lines with '#' will be ignored
+
+# int a = 80;
+# [8][1][6][0][9]
+<INT><CHAR, a><=><INT, 80><;>
