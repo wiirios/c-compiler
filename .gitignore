@@ -17,3 +17,5 @@
 
 # debug information files
 *.dwo
+*.core
+
