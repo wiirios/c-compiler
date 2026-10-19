@@ -24,28 +24,12 @@ int main(int argc, char *argv[]) {
 			fclose(inputf);
 		}
 	}
-
-	FILE *fp = popen("../build/./cc ../input/main_t.c -t", "r");
-	char output[PATH_MAX];
-	int status;
 	
-	if (fp == NULL) error_t("error while opening ./cc");
+	struct phrases phrases_;
+	strcpy(phrases_.input, input);
+	strcpy(phrases_.exp, exp);
 	
-	// assumes that the output had no errors (for now...)
-	while (fgets(output, PATH_MAX, fp) != NULL) if (output[strlen(output) - 1] == '\n') break;
-	 
-	if ((status = pclose(fp)) == -1) error_t("the program failed with status -1");
+	run(phrases_);
 	
-	output[strlen(output)-1] = '\0';
-	
-	printf("input: %s\n", input);
-	printf("exp: %s\n", exp);
-	printf("output: %s\n", output);
-	printf("exit: ");
-	if (assert(exp, output)) printf("OK\n");
-	else printf("not match\n");
-	
-	printf("the program exit with status: %d\n", status);
-
 	return 0;
 }
