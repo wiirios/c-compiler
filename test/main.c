@@ -13,12 +13,16 @@ int main(int argc, char *argv[]) {
 	
 	read_exp("exp", input, exp);
 	
-	// implement an option capable of running the ./cc given the input in the exp file
-	/**
-	 * char input;
-	 * read_exp("exp", input, exp);
-	 * ./cc ../input/main_t.c -t -i input
-	 */
+	if (strcmp(argv[1], "-i") == 0) {
+		FILE *inputf = fopen("../input/main_t.c", "w");
+		
+		if (!inputf) error_t("error while opening ../input/main_t.c");
+		
+		fprintf(inputf, "%s%s", &input[0], "\n");
+		
+		fclose(inputf);	
+	}
+
 	FILE *fp = popen("../build/./cc ../input/main_t.c -t", "r");
 	char output[PATH_MAX];
 	int status;
