@@ -1,5 +1,27 @@
 # lines with '#' will be ignored
 
+# You currently have two options for running the tests.
+# The first is to run them without any arguments. In this case, 
+# the test suite will use the contents of ../input/main_t.c as input. 
+# It will then validate the output—specifically, the tokens—which must 
+# be provided on the second line of that input file.
+
+# The second option is to use the -i flag. This takes the input from the 
+# specified file, replaces the original contents of ../input/main_t.c with it, and 
+# then runs ./cc. Note that validation will still rely on the expected output 
+# provided on the second line, immediately after the input.
+
+#	INTEGER_ENUM,			 0
+#	CHAR_ENUM,				 1
+#	FLOAT_ENUM,				 2
+#	LONG_ENUM,				 3
+#	OPERATOR_ENUM,			 4
+#	PUNCTUATORS_ENUM,		 5
+#	ASSIGMENT_ENUM,			 6
+#	LOGICAL_ENUM,			 7
+#	RESERVED_ENUM,			 8
+#	SEMICOLON_ENUM			 9
+
 # int a = 80;
 # [8][1][6][0][9]
 int a = 80 ;
