@@ -13,13 +13,13 @@
 #include "include/dock.h"
 
 static int i = 0;
-static int block = 0;
 static int phrase_type = -1;
 static int assignment = 0;
 ht_t *ht = NULL;
 dock_t *dock = NULL;
 
 int *ptr_phrase_type = &phrase_type;
+int block = 0;
 
 int main(int argc, char *argv[]) {
 	if (argc < 2) error_t("no input files\nusage: " 
@@ -54,8 +54,8 @@ int main(int argc, char *argv[]) {
 	dock = init_dock_t(64);
 	
 	while (feof(file) == 0) {
-		reader_file_t(BUFFER_, sizeof(BUFFER_), file, &block);
-		scan_t(BUFFER_, &block, tokens);
+		reader_file_t(BUFFER_, sizeof(BUFFER_), file);
+		scan_t(BUFFER_, tokens);
 		
 		if (IS_SEMICOLON(BUFFER_[strlen(BUFFER_) - 1]) || IS_PUNCTUATORS(BUFFER_[strlen(BUFFER_) - 1])) {
 			if (pp & flag_y) for (int i = 0; i < tokens->length; i++) {
@@ -87,6 +87,8 @@ int main(int argc, char *argv[]) {
 		free_tokens_t(tokens);
 		free(tokens);
 	}
+	
+	ht_printall(ht);
 	
 	ht_destroy(ht);
 	destroy_dock(dock);

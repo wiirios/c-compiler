@@ -12,9 +12,10 @@
 static unsigned int line = 1;
 char FILE_NAME[PATH_MAX];
 
-void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
+void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file) {
 	int peek, lookahead, i;
 	extern int *ptr_phrase_type;
+	extern int block;
 
 	i = lookahead = 0;
 	while ((peek = fgetc(file)) != EOF) {
@@ -33,16 +34,29 @@ void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file, int *block) {
 		
 		if (peek != ' ' && (IS_NUMBER(peek) || IS_LETTER(peek))) BUFFER_[i] = peek;
 		
-		if ((IS_OPERATOR(peek) || IS_PUNCTUATORS(peek) || IS_ASSIGNMENT(peek) || IS_SEMICOLON(peek)) && (strlen(BUFFER_) == 0)) {
+//		if ((IS_OPERATOR(peek) || IS_PUNCTUATORS(peek) || IS_ASSIGNMENT(peek) || IS_SEMICOLON(peek)) && (strlen(BUFFER_) == 0)) {
+//			BUFFER_[0] = peek;
+//			BUFFER_[1] = '\0';
+//			
+//			break;
+//		}
+		
+		if ((IS_OPERATOR(peek) || IS_ASSIGNMENT(peek) || IS_SEMICOLON(peek)) && (strlen(BUFFER_) == 0)) {
 			BUFFER_[0] = peek;
 			BUFFER_[1] = '\0';
 			
 			break;
 		}
 		
-		if (IS_PUNCTUATORS(peek) && peek == '{') *block+=1;
+		if (peek == '{') {
+			block+=1;
+			continue;
+		}
 		
-		if (IS_PUNCTUATORS(peek) && peek == '}') *block-=1;
+		if (peek == '}') {
+			block-=1;
+			continue;
+		}
 		
 		if (peek == '\n') line++;
 		

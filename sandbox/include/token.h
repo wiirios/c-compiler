@@ -49,7 +49,7 @@ struct tokens {
 	int length;
 };
 
-token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type);
+token_t *init_token_t(char *identifier, void *value, int block, enum TYPE type);
 
 tokens_t *init_tokens_t();
 

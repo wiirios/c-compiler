@@ -6,9 +6,11 @@
 #include "../include/parser.h"
 #include "../include/utils.h"
 #include "../include/dock.h"
+#include "../include/hashtable.h"
 
 extern int line;
 extern dock_t *dock;
+extern ht_t *ht;
 
 // todo: implement operator precedence (and apply this to the linked list responsible for assembling the sequence of tokens)
 
@@ -23,6 +25,15 @@ int parser(tokens_t *tokens) {
 		error_t("invalid declaration");
 	}
 	
+	if (ht_get(ht, tokens->array_tokens[1]) == 1) {		
+		free_ll(ll);
+		tokens->array_tokens[1]->panic_s.error = 1;
+		memcpy(tokens->array_tokens[1]->panic_s.msg, "previous definition", 20);
+		panic(tokens);
+		error_t("the variable has already been declared in the same block.");
+	}
+	
+	ht_insert(ht, hte_create_entry(tokens->array_tokens[1]->value, tokens->array_tokens[1]->type, tokens->array_tokens[1]->block));
 	free_ll(ll);
 	return 1;
 } 

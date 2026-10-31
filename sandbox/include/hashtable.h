@@ -1,7 +1,9 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H	
 
-#define MAX_CAPACITY 8
+#include "token.h"
+
+#define MAX_CAPACITY 18
 #define FNV_OFFSET 14695981039346656037UL
 #define FNV_PRIME 1099511628211UL
 
@@ -15,10 +17,11 @@ hte_t *hte_create_entry(const char *key, int value, int block);
 
 static uint64_t hash_key(const char* key);
 
+int ht_get(ht_t *ht, token_t *token);
+
 void ht_printall(ht_t *ht);
 void ht_insert(ht_t *ht, hte_t *hte);
 void ht_destroy(ht_t *ht);
 void hte_destroy(ht_t *ht);
-void get(ht_t *ht, const char *key);
 
 #endif

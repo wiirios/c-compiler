@@ -17,6 +17,7 @@ typedef struct ht {
 typedef struct hte {
 	char *key;
 	int value;
+	int block;
 } hte_t;
 
 ht_t *ht_create(void) {
@@ -43,6 +44,7 @@ hte_t *hte_create_entry(const char *key, int value, int block) {
 	
 	memcpy(hte->key, key, strlen(key) + 1);
 	hte->value = value;
+	hte->block = block;
 	
 	return hte;
 }
@@ -90,11 +92,8 @@ static uint64_t hash_key(const char* key) {
     return hash;
 }
 
-// only for testing
 void ht_printall(ht_t *ht) {
-	int i = 0;
-	
-	for (; i < ht->capacity; i++) if (ht->entries[i]) printf("%d %s\n", i, ht->entries[i]->key);
+	for (int i = 0; i < ht->capacity; i++) if (ht->entries[i] != NULL) printf("%d %s\n", i, ht->entries[i]->key);
 }
 
 void ht_destroy(ht_t *ht) {
@@ -114,43 +113,23 @@ void hte_destroy(ht_t *ht) {
 	
 }
 
-void get(ht_t *ht, const char *key) {
-	int hash = hash_key(key) % MAX_CAPACITY;
+int ht_get(ht_t *ht, token_t *token) {
+	int hash = hash_key(token->value) % MAX_CAPACITY;
 	
-	if (strcmp(key, ht->entries[hash]->key) == 0) printf("%d\n", ht->entries[hash]->value);
-	else {
-		for (; hash < ht->capacity; hash++) {
-			if (strcmp(key, ht->entries[hash]->key) == 0) {
-				printf("%d\n", ht->entries[hash]->value);
-				return;
-			}
-		}
-		
-		hash = hash_key(key) % MAX_CAPACITY;
-		
-		if (hash == 0) error_t("the key not exist");
-		else {
-			int i = 0;
-			
-			for (; i < hash; i++) {
-				if (strcmp(key, ht->entries[hash]->key) == 0) {
-					printf("%d\n", ht->entries[hash]->value);
-					return;
-				}
-			}
-			
-			error_t("the key not exist");
-		}
+	if (ht->entries[hash] != NULL && token != NULL) {
+		if (strcmp(token->value, ht->entries[hash]->key) == 0 && ht->entries[hash]->block == token->block) return 1;			
 	}
+	
+	return 0;
 }
 
 ht_t *ht_init(void) {
 	ht_t *ht = ht_create();
 	
-	ht_insert(ht, hte_create_entry("int", INTEGER_PRIMITIVE_DATA_TYPE, -1));
-	ht_insert(ht, hte_create_entry("char", CHAR_PRIMITIVE_DATA_TYPE, -1));
-	ht_insert(ht, hte_create_entry("float", FLOAT_PRIMITIVE_DATA_TYPE, -1));
-	ht_insert(ht, hte_create_entry("long", LONG_PRIMITIVE_DATA_TYPE, -1));
+	ht_insert(ht, hte_create_entry("INT", INTEGER_PRIMITIVE_DATA_TYPE, -1));
+	ht_insert(ht, hte_create_entry("CHAR", CHAR_PRIMITIVE_DATA_TYPE, -1));
+	ht_insert(ht, hte_create_entry("FLOAT", FLOAT_PRIMITIVE_DATA_TYPE, -1));
+	ht_insert(ht, hte_create_entry("LONG", LONG_PRIMITIVE_DATA_TYPE, -1));
 	
 	return ht;
 }

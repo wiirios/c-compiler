@@ -7,10 +7,10 @@
 #include "../include/utils.h"
 #include "../include/dock.h"
 
-token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type) {
+token_t *init_token_t(char *identifier, void *value, int block, enum TYPE type) {
 	if (!identifier) error_t("invalid token identifier");
 	
-	if (*block < 0) error_t("a block cannot be negative");
+	if (block < 0) error_t("a block cannot be negative");
 	
 	token_t *token;
 	token = (token_t*) malloc(sizeof(token_t));
@@ -49,7 +49,7 @@ token_t *init_token_t(char *identifier, void *value, int *block, enum TYPE type)
 			break;
 	}
 	
-	token->block = *block;
+	token->block = block;
 	token->type = type;
 	token->panic_s.error = '\0';
 	token->panic_s.error = -1;
@@ -72,7 +72,7 @@ int print_token_t(token_t *token, uint8_t flag) {
 	int length = 0;
 	
 	if (flag) {
-		printf("[%d] %s", token->type, token->identifier);
+		printf("[%d] [%d] %s", token->type, token->block, token->identifier);
 		goto end;
 	}
 	
@@ -83,7 +83,7 @@ int print_token_t(token_t *token, uint8_t flag) {
             break;
         // char
         case 1:
-			length = printf("<%s, %s>", token->identifier, (char*)token->value);
+	 		length = printf("<%s, %s>", token->identifier, (char*)token->value);
             break;
         // operator
         // punctuators

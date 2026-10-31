@@ -23,18 +23,18 @@ int TYPE_C[] = {
 	LONG_ENUM,
 };
 
-void scan_t(char *phrase, int *block, tokens_t *tokens) {
+void scan_t(char *phrase, tokens_t *tokens) {
 	token_t *token;
 	int value, i;	
 	extern int *ptr_phrase_type;
-	extern ht_t *ht;
+	extern int block;
 	char BUFFER[strlen(phrase) + 1];
 	
 	//if (!tokens) tokens = init_tokens_t();
 	//if(*phrase != ' ' && *phrase != '\n' && *phrase != '\0') tokens->length+=1;
 	
 	value = i = 0;
-		
+	
 	if (isdigit(*phrase)) goto is_num;
 	
 	if (isalpha(*phrase) && (!IS_OPERATOR(*phrase) || !IS_PUNCTUATORS(*phrase))) goto is_char;
@@ -67,7 +67,6 @@ void scan_t(char *phrase, int *block, tokens_t *tokens) {
 		
 		tokens->array_tokens[tokens->length] = token;
 		tokens->length+=1;
-		ht_insert(ht, hte_create_entry(token->identifier, INTEGER_PRIMITIVE_DATA_TYPE, *block));
 		
 		return;
 		
