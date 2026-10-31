@@ -88,9 +88,9 @@ int main(int argc, char *argv[]) {
 		free(tokens);
 	}
 	
-	ht_printall(ht);
-	
+	hte_destroy(ht);
 	ht_destroy(ht);
+	
 	destroy_dock(dock);
 	fclose(file);
 
