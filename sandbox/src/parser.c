@@ -224,6 +224,10 @@ void print_ll(ll_t *ll) {
 }
 
 void panic(tokens_t *tokens) {
+	// i index used to walk through the token array
+	// j index of the token immediately before the faulty one
+	// k total width (in characters) of the printed tokens, i.e. how many '~' to print
+	// l counter for the '~' characters already printed
 	int i, j, k, l;
 	i = j = k = l = 0;
 	
