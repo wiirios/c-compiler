@@ -1,8 +1,8 @@
 C = clang
 NAME = cc
-SRC = main.c src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c src/dock.c
-SRC_GDB = main.c -g src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c src/dock.c
-SRC_WARNINGS = main.c -Wall -Wextra src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c src/dock.c
+SRC = main.c src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c src/dock.c src/sema.c
+SRC_GDB = main.c -g src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c src/dock.c src/sema.c
+SRC_WARNINGS = main.c -Wall -Wextra src/lexer.c src/reader.c src/token.c src/utils.c src/hashtable.c src/parser.c src/dock.c src/sema.c
 
 all:
 	$(C) $(SRC) -o $(NAME)
