@@ -7,6 +7,7 @@
 #include "../include/utils.h"
 #include "../include/dock.h"
 #include "../include/hashtable.h"
+#include "../include/sema.h"
 
 extern int line;
 extern dock_t *dock;
@@ -34,6 +35,7 @@ int parser(tokens_t *tokens) {
 	}
 	
 	ht_insert(ht, hte_create_entry(tokens->array_tokens[1]->value, tokens->array_tokens[1]->type, tokens->array_tokens[1]->block));
+	sema(ll);
 	free_ll(ll);
 	return 1;
 } 
