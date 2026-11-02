@@ -72,17 +72,11 @@ int declaration(ll_t *ll, tokens_t *tokens) {
 			while (1) {
 				if (tokens->array_tokens[j]->type == OPERATOR_ENUM && tokens->array_tokens[j + 1]->type == INTEGER_ENUM) goto binary;
 				
-				if (tokens->array_tokens[j]->type == INTEGER_ENUM && tokens->array_tokens[j - 1]->type == INTEGER_ENUM) {
-					
-					return 0;
-				}
+				if (tokens->array_tokens[j]->type == INTEGER_ENUM && tokens->array_tokens[j - 1]->type == INTEGER_ENUM) return 0;
 				
 				if (tokens->array_tokens[j]->type == SEMICOLON_ENUM) break;
 				
-				if (!alldecl[i - 1](tokens->array_tokens[j])) {
-					
-					return 0;
-				}
+				if (!alldecl[i - 1](tokens->array_tokens[j])) return 0;
 				
 				binary:
 					insert_node(ll, tokens->array_tokens[j]);
@@ -92,12 +86,11 @@ int declaration(ll_t *ll, tokens_t *tokens) {
 			i_c = 0;
 		}
 		
-		if (!alldecl[i](tokens->array_tokens[j])) {
-			
-			return 0;	
-		}
+		if (!alldecl[i](tokens->array_tokens[j])) return 0;
 		
 		insert_node(ll, tokens->array_tokens[j]);
+		
+		if (tokens->array_tokens[j]->type == SEMICOLON_ENUM) return 1;
 		
 		if (tokens->array_tokens[j]->type == INTEGER_ENUM) i_c++;
 				
@@ -127,6 +120,8 @@ int id(token_t *token) {
 }
 
 int assigment(token_t *token) {
+	if (token->type == SEMICOLON_ENUM) return 1;
+	
 	if (token->type != ASSIGMENT_ENUM && !IS_ASSIGNMENT(*token->identifier) && strlen(token->identifier) != 1) {
 		set_error(token, 2);
 		return 0;
