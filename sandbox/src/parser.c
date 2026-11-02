@@ -39,14 +39,18 @@ int parser(tokens_t *tokens) {
 	}
 	
 	if (ht_get(ht, tokens->array_tokens[1]) == 1) {
-		tokens->array_tokens[1]->panic_s.error = 1;
-		memcpy(tokens->array_tokens[1]->panic_s.msg, panic_msg[7], strlen(panic_msg[7]));
+		set_error(tokens->array_tokens[1], 7);
 		panic(tokens);
 		error_t("the variable has already been declared in the same block.");
 	}
 	
 	ht_insert(ht, hte_create_entry(tokens->array_tokens[1]->value, tokens->array_tokens[1]->type, tokens->array_tokens[1]->block));
-	sema(ll);
+	if (!sema(ll)) {
+		set_error(tokens->array_tokens[1], 8);
+		panic(tokens);
+		error_t("the value assigned to the variable is different from the one that was declared.");
+	}
+	
 	free_ll(ll);
 	return 1;
 } 
@@ -105,9 +109,7 @@ int declaration(ll_t *ll, tokens_t *tokens) {
 
 int type(token_t *token) {
 	if (token->type != RESERVED_ENUM) {
-		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, panic_msg[0], strlen(panic_msg[0]));
-		
+		set_error(token, 0);
 		return 0;	
 	}
 	
@@ -116,9 +118,7 @@ int type(token_t *token) {
 
 int id(token_t *token) {
 	if (token->identifier == NULL || *token->identifier == '\0') {
-		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, panic_msg[1], strlen(panic_msg[1]));
-		
+		set_error(token, 1);
 		return 0;
 	}
 	
@@ -127,9 +127,7 @@ int id(token_t *token) {
 
 int assigment(token_t *token) {
 	if (token->type != ASSIGMENT_ENUM && !IS_ASSIGNMENT(*token->identifier) && strlen(token->identifier) != 1) {
-		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, panic_msg[2], strlen(panic_msg[2]));
-		
+		set_error(token, 2);
 		return 0;
 	}
 	
@@ -138,9 +136,7 @@ int assigment(token_t *token) {
 
 int expression(token_t *token) {
 	if (!factor(token)) {
-		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, panic_msg[3], strlen(panic_msg[3]));
-		
+		set_error(token, 3);
 		return 0;
 	}
 	
@@ -149,9 +145,7 @@ int expression(token_t *token) {
 
 int factor(token_t *token) {
 	if (!number(token)) {
-		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, panic_msg[4], strlen(panic_msg[4]));
-		
+		set_error(token, 4);
 		return 0;
 	}
 	
@@ -160,9 +154,7 @@ int factor(token_t *token) {
 
 int number(token_t *token) {
 	if (token->type != INTEGER_ENUM) {
-		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, panic_msg[5], strlen(panic_msg[5]));
-		
+		set_error(token, 5);
 		return 0;
 	}
 	
@@ -171,9 +163,7 @@ int number(token_t *token) {
 
 int semicolon(token_t *token) {
 	if (token->type != SEMICOLON_ENUM && !IS_SEMICOLON(*token->identifier) && strlen(token->identifier) != 1) {
-		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, panic_msg[6], strlen(panic_msg[6]));
-		
+		set_error(token, 6);
 		return 0;
 	}
 	
@@ -260,4 +250,9 @@ void panic(tokens_t *tokens) {
 	}
 	
 	printf("\n");
+}
+
+void set_error(token_t *token, int index) {
+	token->panic_s.error = 1;
+	memcpy(token->panic_s.msg, panic_msg[index], strlen(panic_msg[index]));
 }
