@@ -22,7 +22,8 @@ const char *panic_msg[] = {
 	"number error",
 	"semicolon error",
 	"previous definition",
-	"incompatible type"
+	"incompatible type",
+	"bad character"
 };
 
 // todo: implement operator precedence (and apply this to the linked list responsible for assembling the sequence of tokens)

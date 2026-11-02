@@ -54,9 +54,14 @@ void scan(char *phrase, tokens_t *tokens) {
 		
 	is_num:
 		while (*phrase) {
-			if (!isdigit(*phrase)) {
-				printf("bad character: %c\n", *phrase);
-				error("bad character found while reading a integer");
+			if (!isdigit(*phrase)) {							
+				token = init_token("INT", &value, block, INTEGER_ENUM);
+				tokens->array_tokens[tokens->length] = token;
+				tokens->length+=1;
+				
+				set_error(token, 9);
+				panic_mode(tokens);
+				error("bad character found while reading a integer.");
 			}
 			
 			value = 10 * value + (*phrase - '0');
@@ -126,4 +131,3 @@ int get_phrase_type(char *buffer) {
 	
 	return 0;
 }
-
