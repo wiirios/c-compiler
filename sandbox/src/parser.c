@@ -23,13 +23,19 @@ const char *panic_msg[] = {
 	"semicolon error",
 	"previous definition",
 	"incompatible type",
-	"bad character"
+	"bad character",
+	"short grammar"
 };
 
 // todo: implement operator precedence (and apply this to the linked list responsible for assembling the sequence of tokens)
 
 int parser(tokens_t *tokens) {
-	if (tokens->length < 5) return 0;
+	// if tokens->length < 3, everything will be ignored, including grammatical errors
+	if (tokens->length < 3) {
+		set_error(tokens->array_tokens[1], 10);
+		panic_mode(tokens);
+		error("the grammar is too short to be analyzed.");
+	}
 	
 	ll_t *ll = init_ll();
 	insert_ship(dock, ll, TYPEITEM_LL);
