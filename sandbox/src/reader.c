@@ -9,7 +9,7 @@
 #include "../include/utils.h"
 #include "../include/lexer.h"
 
-static unsigned int line = 1;
+unsigned int line = 1;
 char FILE_NAME[PATH_MAX];
 
 void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file) {
@@ -100,8 +100,4 @@ int get_file_size_t(const char *file_name, size_t *out_size) {
     *out_size = (size_t) st.st_size;
 
     return 0;
-}
-
-unsigned int get_file_line() {
-	return line;
 }

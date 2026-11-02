@@ -34,20 +34,20 @@ int parser(tokens_t *tokens) {
 	insert_ship_t(dock, ll, TYPEITEM_LL);
 	
 	if (!declaration(ll, tokens)) {
-		panic(tokens);
+		panic_mode(tokens);
 		error_t("invalid declaration.");
 	}
 	
 	if (ht_get(ht, tokens->array_tokens[1]) == 1) {
 		set_error(tokens->array_tokens[1], 7);
-		panic(tokens);
+		panic_mode(tokens);
 		error_t("the variable has already been declared in the same block.");
 	}
 	
 	ht_insert(ht, hte_create_entry(tokens->array_tokens[1]->value, tokens->array_tokens[1]->type, tokens->array_tokens[1]->block));
 	if (!sema(ll)) {
 		set_error(tokens->array_tokens[1], 8);
-		panic(tokens);
+		panic_mode(tokens);
 		error_t("the value assigned to the variable is different from the one that was declared.");
 	}
 	
@@ -224,32 +224,6 @@ void print_ll(ll_t *ll) {
 		printf("ll token->identifier: %s\n", current->token->identifier);	
 		ll->head = ll->head->next;
 	}
-}
-
-void panic(tokens_t *tokens) {
-	// i index used to walk through the token array
-	// j index of the token immediately before the faulty one
-	// k total width (in characters) of the printed tokens, i.e. how many '~' to print
-	// l counter for the '~' characters already printed
-	int i, j, k, l;
-	i = j = k = l = 0;
-	
-	for (; i < tokens->length; i++) {
-		if (tokens->array_tokens[i]->panic_s.error == 1) { 
-			j = i - 1;
-			
-			printf("\nerror: line=%d", get_file_line());
-			printf("\nexpected: [%s] at:\n", tokens->array_tokens[i]->panic_s.msg);
-			
-			l += print_token_t(tokens->array_tokens[j], 0);
-			l += print_token_t(tokens->array_tokens[i], 0);
-			
-			printf("\n");
-			for (; k < l; k++) putchar('~');
-		}
-	}
-	
-	printf("\n");
 }
 
 void set_error(token_t *token, int index) {

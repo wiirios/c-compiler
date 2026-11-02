@@ -42,6 +42,5 @@ void insert_node(ll_t *ll, token_t *token);
 void free_ll(ll_t *ll);
 void print_ll(ll_t *ll);
 void set_error(token_t *token, int index);
-void panic(tokens_t *tokens);
 
 #endif

@@ -18,6 +18,4 @@ FILE *get_file_t(const char *file_name);
 
 int get_file_size_t(const char *file_name, size_t *out_size);
 
-unsigned int get_file_line(void);
-
 #endif
