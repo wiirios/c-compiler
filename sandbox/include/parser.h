@@ -11,6 +11,7 @@ enum PANIC_CODES {
 };
 
 int parser(tokens_t *tokens);
+int get_id_location(tokens_t *tokens);
 
 int type(token_t *token);
 int id(token_t *token);

@@ -51,7 +51,9 @@ int parser(tokens_t *tokens) {
 		error("the variable has already been declared in the same block.");
 	}
 	
-	ht_insert(ht, hte_create_entry(tokens->array_tokens[1]->value, tokens->array_tokens[1]->type, tokens->array_tokens[1]->block));
+	int t_index = get_id_location(tokens);
+	
+	ht_insert(ht, hte_create_entry(tokens->array_tokens[t_index]->value, tokens->array_tokens[t_index]->type, tokens->array_tokens[t_index]->block));
 	if (!sema(ll)) {
 		set_error(tokens->array_tokens[1], 8);
 		panic_mode(tokens);
@@ -231,4 +233,12 @@ void print_ll(ll_t *ll) {
 void set_error(token_t *token, int index) {
 	token->panic_s.error = 1;
 	memcpy(token->panic_s.msg, panic_msg[index], strlen(panic_msg[index]));
+}
+
+int get_id_location(tokens_t *tokens) {
+	// yes, this will be a problem in the future, because the same enum that will be used for 
+	// variables of type "char" is being used here as a basis for comparison to determine whether a token is a variable name.
+	for (int i = 0; i < tokens->length; i++) if (tokens->array_tokens[i]->type == CHAR_ENUM) return i;
+	
+	return -1;
 }

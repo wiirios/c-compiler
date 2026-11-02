@@ -76,6 +76,10 @@ int print_token(token_t *token, uint8_t flag) {
 		goto end;
 	}
 	
+	if (token == NULL) {
+		return length;	
+	}
+	
 	switch (token->type) {
 		// int
         case 0:
