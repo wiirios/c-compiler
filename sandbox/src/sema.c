@@ -3,9 +3,10 @@
 #include "../include/sema.h"
 #include "../include/utils.h"
 
-void sema(ll_t *ll) {	
+int sema(ll_t *ll) {	
 	enum TYPE type_ = get_type(ll->head->token);
 	
+	return check_type(type_, ll);
 }
 
 enum TYPE get_type(token_t *token) {

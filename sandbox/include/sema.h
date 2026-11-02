@@ -6,10 +6,9 @@
 #include "parser.h"
 #include "token.h"
 
-void sema(ll_t *ll);
-
 enum TYPE get_type(token_t *token);
 
+int sema(ll_t *ll);
 int check_type(enum TYPE type_head, ll_t *ll);
 
 #endif
