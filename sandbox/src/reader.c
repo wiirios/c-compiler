@@ -60,7 +60,7 @@ void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file) {
 		
 		if (peek == '\n') line++;
 		
-		if (peek == ' ' && strlen(BUFFER_) == 0) continue;
+		if ((peek == ' ' || peek == '\t') && strlen(BUFFER_) == 0) continue;
 		
 		if (peek == ' ' || peek == '\n') {
 			BUFFER_[i] = '\0';
