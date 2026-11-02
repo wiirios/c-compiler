@@ -23,7 +23,7 @@ int TYPE_C[] = {
 	LONG_ENUM,
 };
 
-void scan_t(char *phrase, tokens_t *tokens) {
+void scan(char *phrase, tokens_t *tokens) {
 	token_t *token;
 	int value, i;	
 	extern int *ptr_phrase_type;
@@ -45,7 +45,7 @@ void scan_t(char *phrase, tokens_t *tokens) {
 	
 	is_assignment:
 		memcpy(BUFFER, phrase, strlen(phrase) + 1);
-		token = init_token_t("ASSIGNMENT", &BUFFER, block, ASSIGMENT_ENUM);
+		token = init_token("ASSIGNMENT", &BUFFER, block, ASSIGMENT_ENUM);
 		
 		memset(BUFFER, 0, strlen(BUFFER));
 		tokens->length+=1;
@@ -56,14 +56,14 @@ void scan_t(char *phrase, tokens_t *tokens) {
 		while (*phrase) {
 			if (!isdigit(*phrase)) {
 				printf("bad character: %c\n", *phrase);
-				error_t("bad character found while reading a integer");
+				error("bad character found while reading a integer");
 			}
 			
 			value = 10 * value + (*phrase - '0');
 			phrase++;
 		}
 		
-		token = init_token_t("INT", &value, block, INTEGER_ENUM);
+		token = init_token("INT", &value, block, INTEGER_ENUM);
 		
 		tokens->array_tokens[tokens->length] = token;
 		tokens->length+=1;
@@ -84,7 +84,7 @@ void scan_t(char *phrase, tokens_t *tokens) {
 			
 			for (; i < strlen(BUFFER); i++) BUFFER[i] = toupper((unsigned char)BUFFER[i]);			
 			
-			token = init_token_t(BUFFER, &BUFFER, block, RESERVED_ENUM);
+			token = init_token(BUFFER, &BUFFER, block, RESERVED_ENUM);
 			memset(BUFFER, 0, strlen(BUFFER));
 			
 			tokens->array_tokens[tokens->length] = token;		
@@ -93,7 +93,7 @@ void scan_t(char *phrase, tokens_t *tokens) {
 			return;
 		}
 			
-		token = init_token_t("CHAR", &BUFFER, block, CHAR_ENUM);
+		token = init_token("CHAR", &BUFFER, block, CHAR_ENUM);
 		memset(BUFFER, 0, strlen(BUFFER));
 		
 		tokens->array_tokens[tokens->length] = token;
@@ -104,12 +104,12 @@ void scan_t(char *phrase, tokens_t *tokens) {
 	is_signal:
 		memcpy(BUFFER, phrase, strlen(phrase) + 1);
 		
-		if (IS_OPERATOR(*phrase)) token = init_token_t("OPERATOR", &BUFFER, block, OPERATOR_ENUM);
-		else if (IS_PUNCTUATORS(*phrase)) token = init_token_t("PUNCTUATORS", &BUFFER, block, PUNCTUATORS_ENUM);
-		else if (IS_ASSIGNMENT(*phrase)) token = init_token_t("ASSIGNMENT", &BUFFER, block, ASSIGMENT_ENUM);
-		else if (IS_LOGICAL(*phrase)) token = init_token_t("LOGICAL", &BUFFER, block, LOGICAL_ENUM);
-		else if (IS_SEMICOLON(*phrase)) token = init_token_t("SEMICOLON", &BUFFER, block, SEMICOLON_ENUM);
-		else if (IS_ASSIGNMENT(*phrase)) token = init_token_t("ASSIGNMENT", &BUFFER, block, ASSIGMENT_ENUM);
+		if (IS_OPERATOR(*phrase)) token = init_token("OPERATOR", &BUFFER, block, OPERATOR_ENUM);
+		else if (IS_PUNCTUATORS(*phrase)) token = init_token("PUNCTUATORS", &BUFFER, block, PUNCTUATORS_ENUM);
+		else if (IS_ASSIGNMENT(*phrase)) token = init_token("ASSIGNMENT", &BUFFER, block, ASSIGMENT_ENUM);
+		else if (IS_LOGICAL(*phrase)) token = init_token("LOGICAL", &BUFFER, block, LOGICAL_ENUM);
+		else if (IS_SEMICOLON(*phrase)) token = init_token("SEMICOLON", &BUFFER, block, SEMICOLON_ENUM);
+		else if (IS_ASSIGNMENT(*phrase)) token = init_token("ASSIGNMENT", &BUFFER, block, ASSIGMENT_ENUM);
 		
 		memset(BUFFER, 0, strlen(BUFFER));
 		tokens->array_tokens[tokens->length] = token;

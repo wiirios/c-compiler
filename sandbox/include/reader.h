@@ -12,10 +12,10 @@
 #define IS_LETTER(c) (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z')
 #define IS_NUMBER(c) (c >= '0' && c <= '9')
 
-void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file); 
+void reader_file(char *BUFFER_, size_t sizebuffer, FILE *file); 
 
-FILE *get_file_t(const char *file_name);
+FILE *get_file(const char *file_name);
 
-int get_file_size_t(const char *file_name, size_t *out_size);
+int get_file_size(const char *file_name, size_t *out_size);
 
 #endif

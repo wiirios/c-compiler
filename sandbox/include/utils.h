@@ -7,7 +7,7 @@
 
 unsigned int get_file_line();
 
-int error_t(const char *msg);
+int error(const char *msg);
 
 void panic_mode(tokens_t *tokens);
 

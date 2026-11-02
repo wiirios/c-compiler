@@ -10,7 +10,7 @@ enum PRIMITIVE_DATA_TYPE_C_ENUM {
 	LONG_PRIMITIVE_DATA_TYPE
 };
 
-void scan_t(char *phrase, tokens_t *tokens);
+void scan(char *phrase, tokens_t *tokens);
 
 int get_phrase_type(char *buffer);
 

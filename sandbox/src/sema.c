@@ -10,7 +10,7 @@ int sema(ll_t *ll) {
 }
 
 enum TYPE get_type(token_t *token) {
-	if (token->type > TYPES_LENGTH) error_t("type not recognized");
+	if (token->type > TYPES_LENGTH) error("type not recognized");
 	
 	enum TYPE type;
 	

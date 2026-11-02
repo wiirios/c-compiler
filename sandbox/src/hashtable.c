@@ -24,7 +24,7 @@ ht_t *ht_create(void) {
 	ht_t *ht;
 	ht = (ht_t*) malloc(sizeof(ht_t));
 	
-	if (!ht) error_t("error while allocated hashtable");
+	if (!ht) error("error while allocated hashtable");
 
 	ht->capacity = MAX_CAPACITY;
 	ht->length = 0;
@@ -36,11 +36,11 @@ hte_t *hte_create_entry(const char *key, int value, int block) {
 	hte_t *hte;
 	hte = (hte_t*) malloc(sizeof(hte_t));
 	
-	if (!hte) error_t("error while allocated hash entry");
+	if (!hte) error("error while allocated hash entry");
 	
 	hte->key = (char*) malloc(strlen(key) + 1);
 	
-	if (!hte->key) error_t("error while allocanting key");
+	if (!hte->key) error("error while allocanting key");
 	
 	memcpy(hte->key, key, strlen(key) + 1);
 	hte->value = value;
@@ -50,9 +50,9 @@ hte_t *hte_create_entry(const char *key, int value, int block) {
 }
 
 void ht_insert(ht_t *ht, hte_t *hte) {
-	if (!ht) error_t("ht not created");
+	if (!ht) error("ht not created");
 	
-	if (ht->length == ht->capacity) error_t("ht is full");
+	if (ht->length == ht->capacity) error("ht is full");
 	
 	int hash = hash_key(hte->key) % MAX_CAPACITY;
 	
@@ -64,7 +64,7 @@ void ht_insert(ht_t *ht, hte_t *hte) {
 		
 		hash = hash_key(hte->key) % MAX_CAPACITY;
 		
-		if (hash == 0) error_t("colision");
+		if (hash == 0) error("colision");
 		else {
 				int i = 0;
 				for (; i < hash; i++) if (ht->entries[i] == NULL) {
@@ -72,7 +72,7 @@ void ht_insert(ht_t *ht, hte_t *hte) {
 						return;
 					}
 				
-				error_t("colision 2 loop");
+				error("colision 2 loop");
 			}
 		
 	}

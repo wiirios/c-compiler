@@ -31,24 +31,24 @@ int parser(tokens_t *tokens) {
 	if (tokens->length < 5) return 0;
 	
 	ll_t *ll = init_ll();
-	insert_ship_t(dock, ll, TYPEITEM_LL);
+	insert_ship(dock, ll, TYPEITEM_LL);
 	
 	if (!declaration(ll, tokens)) {
 		panic_mode(tokens);
-		error_t("invalid declaration.");
+		error("invalid declaration.");
 	}
 	
 	if (ht_get(ht, tokens->array_tokens[1]) == 1) {
 		set_error(tokens->array_tokens[1], 7);
 		panic_mode(tokens);
-		error_t("the variable has already been declared in the same block.");
+		error("the variable has already been declared in the same block.");
 	}
 	
 	ht_insert(ht, hte_create_entry(tokens->array_tokens[1]->value, tokens->array_tokens[1]->type, tokens->array_tokens[1]->block));
 	if (!sema(ll)) {
 		set_error(tokens->array_tokens[1], 8);
 		panic_mode(tokens);
-		error_t("the value assigned to the variable is different from the one that was declared.");
+		error("the value assigned to the variable is different from the one that was declared.");
 	}
 	
 	free_ll(ll);
@@ -173,7 +173,7 @@ int semicolon(token_t *token) {
 ll_t *init_ll(void) {
 	ll_t *ll = (ll_t*) malloc(sizeof(ll_t));
 
-	if (!ll) error_t("Error while creating linked list\n");
+	if (!ll) error("Error while creating linked list\n");
 		
 	ll->head = NULL;
 	
@@ -183,7 +183,7 @@ ll_t *init_ll(void) {
 node_t *init_node(token_t *token) {
 	node_t *node = (node_t*) malloc(sizeof(node_t));
 	
-	if (!node) error_t("\n");
+	if (!node) error("\n");
 	
 	node->next = NULL;
 	node->token = token;

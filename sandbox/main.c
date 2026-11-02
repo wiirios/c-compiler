@@ -22,7 +22,7 @@ int *ptr_phrase_type = &phrase_type;
 int block = 0;
 
 int main(int argc, char *argv[]) {
-	if (argc < 2) error_t("no input files\nusage: " 
+	if (argc < 2) error("no input files\nusage: " 
 	"./cc [-t] [-y] source_file\n-t, shows the tokenization process\n-y, shows the token types\nsource_file, file to be compiled");
 
 	static struct option long_options[] = {
@@ -41,31 +41,31 @@ int main(int argc, char *argv[]) {
         switch (opt) {
 			case 't': pp |= flag_t; break;
 			case 'y': pp |= flag_y; break;
-			default: error_t("usage: ./cc [-t] [-y] source_file\n-t, shows the tokenization process\n-y, shows the token types\nsource_file, file to be compiled");
+			default: error("usage: ./cc [-t] [-y] source_file\n-t, shows the tokenization process\n-y, shows the token types\nsource_file, file to be compiled");
 		}
     }
 	
-	FILE *file = get_file_t(argv[optind]);
+	FILE *file = get_file(argv[optind]);
 	
 	char BUFFER_[BUFFER_SIZE_T];
 	ht = ht_init();
 	
-	tokens_t *tokens = init_tokens_t();
-	dock = init_dock_t(64);
+	tokens_t *tokens = init_tokens();
+	dock = init_dock(64);
 	
 	while (feof(file) == 0) {
-		reader_file_t(BUFFER_, sizeof(BUFFER_), file);
-		scan_t(BUFFER_, tokens);
+		reader_file(BUFFER_, sizeof(BUFFER_), file);
+		scan(BUFFER_, tokens);
 		
 		if (IS_SEMICOLON(BUFFER_[strlen(BUFFER_) - 1]) || IS_PUNCTUATORS(BUFFER_[strlen(BUFFER_) - 1])) {
 			if (pp & flag_y) for (int i = 0; i < tokens->length; i++) {
-				print_token_t(tokens->array_tokens[i], 1);
+				print_token(tokens->array_tokens[i], 1);
 				printf("\n");	
 			}
 				
 			if (pp & flag_y) printf("----EOF [-y]----\n");
 				
-			if (pp & flag_t) for (int i = 0; i < tokens->length; i++) print_token_t(tokens->array_tokens[i], 0);
+			if (pp & flag_t) for (int i = 0; i < tokens->length; i++) print_token(tokens->array_tokens[i], 0);
 				
 			if (pp & flag_t) printf("\n----EOF [-t]----\n");
 			
@@ -73,9 +73,9 @@ int main(int argc, char *argv[]) {
 			else printf("valid grammar\n");
 			
 			// reset tokens	
-			free_tokens_t(tokens);
+			free_tokens(tokens);
 			free(tokens);
-			tokens = init_tokens_t();
+			tokens = init_tokens();
 			i = 0;
 		}
 		
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	if (tokens) {
-		free_tokens_t(tokens);
+		free_tokens(tokens);
 		free(tokens);
 	}
 	

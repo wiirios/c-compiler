@@ -4,9 +4,11 @@
 #include <stdint.h>
 
 #define SHOW_TYPE_TOKEN 0
-#define TYPES_LENGTH 8
 #define MAX_TOKENS 32
 #define MAX_PANIC_TOKEN_MSG_LENGTH 1024
+
+// NOTE: update when the TYPE enum grows
+#define TYPES_LENGTH 10
 
 enum TYPE {
 	INTEGER_ENUM,			// 0
@@ -49,15 +51,15 @@ struct tokens {
 	int length;
 };
 
-token_t *init_token_t(char *identifier, void *value, int block, enum TYPE type);
+token_t *init_token(char *identifier, void *value, int block, enum TYPE type);
 
-tokens_t *init_tokens_t();
+tokens_t *init_tokens();
 
-int print_token_t(token_t *token, uint8_t flag);
+int print_token(token_t *token, uint8_t flag);
 int get_token_block(token_t *token);
 int get_tokens_length(tokens_t *tokens);
 
-void free_token_t(token_t *token);
-void free_tokens_t(tokens_t *tokens);
+void free_token(token_t *token);
+void free_tokens(tokens_t *tokens);
 
 #endif

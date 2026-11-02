@@ -12,7 +12,7 @@
 unsigned int line = 1;
 char FILE_NAME[PATH_MAX];
 
-void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file) {
+void reader_file(char *BUFFER_, size_t sizebuffer, FILE *file) {
 	int peek, lookahead, i;
 	extern int *ptr_phrase_type;
 	extern int block;
@@ -74,23 +74,23 @@ void reader_file_t(char *BUFFER_, size_t sizebuffer, FILE *file) {
 	
 }
 
-FILE *get_file_t(const char *file_name) {
+FILE *get_file(const char *file_name) {
 		size_t size_file;
 		
 		FILE *file = fopen(file_name, "r");
 		
-		if (!file) error_t("no such file");
+		if (!file) error("no such file");
 		
-		if (get_file_size_t(file_name, &size_file) != 0) error_t("Cannot get file size or file size too small to read");
+		if (get_file_size(file_name, &size_file) != 0) error("Cannot get file size or file size too small to read");
 		
-		if (strcmp(strrchr(file_name, '.'), ".c") != 0) error_t("Invalid file extension");	
+		if (strcmp(strrchr(file_name, '.'), ".c") != 0) error("Invalid file extension");	
 		
 		memcpy(FILE_NAME, file_name, strlen(file_name) + 1);
 		
 		return file;
 }
 
-int get_file_size_t(const char *file_name, size_t *out_size) {
+int get_file_size(const char *file_name, size_t *out_size) {
     struct stat st;
 
     if ((stat(file_name, &st)) != 0) return -1;

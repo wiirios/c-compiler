@@ -9,7 +9,7 @@
 extern dock_t *dock;
 extern unsigned int line;
 
-int error_t(const char *msg) {
+int error(const char *msg) {
 	fprintf(stderr, "%s\n", msg);
 	
 	destroy_dock(dock);
@@ -32,8 +32,8 @@ void panic_mode(tokens_t *tokens) {
 			printf("\nerror: line=%d", get_file_line());
 			printf("\nexpected: [%s] at:\n", tokens->array_tokens[i]->panic_s.msg);
 			
-			l += print_token_t(tokens->array_tokens[j], 0);
-			l += print_token_t(tokens->array_tokens[i], 0);
+			l += print_token(tokens->array_tokens[j], 0);
+			l += print_token(tokens->array_tokens[i], 0);
 			
 			printf("\n");
 			for (; k < l; k++) putchar('~');

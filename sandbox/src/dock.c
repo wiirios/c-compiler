@@ -2,10 +2,10 @@
 #include "../include/token.h"
 #include "../include/parser.h"
 
-dock_t *init_dock_t(size_t size) {
+dock_t *init_dock(size_t size) {
 	dock_t *dock = (dock_t*) malloc(sizeof(dock_t));
 	
-	if (!dock) error_t("error while creating dock");
+	if (!dock) error("error while creating dock");
 	
 	dock->ships = NULL;
 	dock->max_size = size;
@@ -14,7 +14,7 @@ dock_t *init_dock_t(size_t size) {
 	return dock;
 }
 
-int insert_ship_t(dock_t *dock, void *item, enum TYPE_ITEM type) {	
+int insert_ship(dock_t *dock, void *item, enum TYPE_ITEM type) {	
 	if (dock->length == dock->max_size) return 0;
 
 	if (dock->ships == NULL) dock->ships = malloc(sizeof(ship_t));
@@ -46,7 +46,7 @@ void destroy_dock(dock_t *dock) {
 	for (int i = 0; i < dock->length; i++) {
 		switch (dock->ships[i].type) {
 			case 0:
-				free_token_t(dock->ships[i].item);
+				free_token(dock->ships[i].item);
 				break;
 			case 1:
 				tokens_i = i;
@@ -71,6 +71,6 @@ static void free_dock(dock_t *dock) {
 	free(dock);
 }
 
-size_t dock_length_t(dock_t *dock) {
+size_t dock_length(dock_t *dock) {
 	return dock->length;
 }
