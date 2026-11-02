@@ -13,6 +13,18 @@ extern int line;
 extern dock_t *dock;
 extern ht_t *ht;
 
+const char *panic_msg[] = {
+	"type error",
+	"id error",
+	"assigment error",
+	"expression error",
+	"factor error",
+	"number error",
+	"semicolon error",
+	"previous definition",
+	"incompatible type"
+};
+
 // todo: implement operator precedence (and apply this to the linked list responsible for assembling the sequence of tokens)
 
 int parser(tokens_t *tokens) {
@@ -23,13 +35,12 @@ int parser(tokens_t *tokens) {
 	
 	if (!declaration(ll, tokens)) {
 		panic(tokens);
-		error_t("invalid declaration");
+		error_t("invalid declaration.");
 	}
 	
-	if (ht_get(ht, tokens->array_tokens[1]) == 1) {		
-		free_ll(ll);
+	if (ht_get(ht, tokens->array_tokens[1]) == 1) {
 		tokens->array_tokens[1]->panic_s.error = 1;
-		memcpy(tokens->array_tokens[1]->panic_s.msg, "previous definition", 20);
+		memcpy(tokens->array_tokens[1]->panic_s.msg, panic_msg[7], strlen(panic_msg[7]));
 		panic(tokens);
 		error_t("the variable has already been declared in the same block.");
 	}
@@ -95,7 +106,7 @@ int declaration(ll_t *ll, tokens_t *tokens) {
 int type(token_t *token) {
 	if (token->type != RESERVED_ENUM) {
 		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, "type error", 11);
+		memcpy(token->panic_s.msg, panic_msg[0], strlen(panic_msg[0]));
 		
 		return 0;	
 	}
@@ -106,7 +117,7 @@ int type(token_t *token) {
 int id(token_t *token) {
 	if (token->identifier == NULL || *token->identifier == '\0') {
 		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, "id error", 9);
+		memcpy(token->panic_s.msg, panic_msg[1], strlen(panic_msg[1]));
 		
 		return 0;
 	}
@@ -117,7 +128,7 @@ int id(token_t *token) {
 int assigment(token_t *token) {
 	if (token->type != ASSIGMENT_ENUM && !IS_ASSIGNMENT(*token->identifier) && strlen(token->identifier) != 1) {
 		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, "assigment error", 16);
+		memcpy(token->panic_s.msg, panic_msg[2], strlen(panic_msg[2]));
 		
 		return 0;
 	}
@@ -128,7 +139,7 @@ int assigment(token_t *token) {
 int expression(token_t *token) {
 	if (!factor(token)) {
 		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, "expression error", 17);
+		memcpy(token->panic_s.msg, panic_msg[3], strlen(panic_msg[3]));
 		
 		return 0;
 	}
@@ -139,7 +150,7 @@ int expression(token_t *token) {
 int factor(token_t *token) {
 	if (!number(token)) {
 		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, "factor error", 13);
+		memcpy(token->panic_s.msg, panic_msg[4], strlen(panic_msg[4]));
 		
 		return 0;
 	}
@@ -150,7 +161,7 @@ int factor(token_t *token) {
 int number(token_t *token) {
 	if (token->type != INTEGER_ENUM) {
 		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, "number error", 13);
+		memcpy(token->panic_s.msg, panic_msg[5], strlen(panic_msg[5]));
 		
 		return 0;
 	}
@@ -161,7 +172,7 @@ int number(token_t *token) {
 int semicolon(token_t *token) {
 	if (token->type != SEMICOLON_ENUM && !IS_SEMICOLON(*token->identifier) && strlen(token->identifier) != 1) {
 		token->panic_s.error = 1;
-		memcpy(token->panic_s.msg, "semicolon error", 16);
+		memcpy(token->panic_s.msg, panic_msg[6], strlen(panic_msg[6]));
 		
 		return 0;
 	}
